@@ -1,4 +1,4 @@
-# Knomatic Studio API
+# Disruptive Backend
 
 This backend server is written using expressJS
 
