@@ -2,8 +2,13 @@ import express from "express";
 import routes from "./Routes/index.ts";
 import dotenv from "dotenv";
 import Database from "./Config/Database.ts";
+import * as url from "url";
 import AdminBroConfig from "./Config/AdminBro.ts";
 import cors from "cors";
+import path, { dirname } from "path";
+
+const __filename = url.fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 dotenv.config({ path: ".env" });
 const app = express();
@@ -16,7 +21,8 @@ const start = async () => {
   await Database();
 
   routes(app);
-  app.use(AdminBroConfig.AdminBroRootPath, AdminBroConfig.AdminRouter);
+  /*   app.use(AdminBroConfig.AdminBroRootPath, AdminBroConfig.AdminRouter); */
+  app.use("/public", express.static("public"));
 
   //Server Up
   app.listen(port, () => {

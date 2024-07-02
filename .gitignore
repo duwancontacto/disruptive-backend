@@ -16,5 +16,9 @@ yarn-error.log*
 .env
 
 
+# Public content
+/public/*
+
+
 
 

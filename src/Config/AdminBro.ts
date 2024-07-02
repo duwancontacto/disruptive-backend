@@ -1,11 +1,14 @@
 import AdminJS from "adminjs";
-import AdminJSExpress from "@adminjs/express";
+import { componentLoader } from "./AdminComponents/ComponentLoader.ts";
+import AdminJSExpress, { name } from "@adminjs/express";
 import { Resource, Database } from "@adminjs/mongoose";
-import CategoryModel from "../Model/CategoryModel.ts";
-import ContentModel from "../Model/ContentModel.ts";
+import BranchModel from "../Model/BranchModel.ts";
+import CustomerModel from "../Model/CustomerModel.ts";
+import uploadFeature from "@adminjs/upload";
 
-import ThemeModel from "../Model/ThemeModel.ts";
-import UserModel from "../Model/UserModel.ts";
+import BoxTypesModel from "../Model/BoxTypesModel.ts";
+import OrderModel from "../Model/OrderModel.ts";
+import BranchCategoryModel from "../Model/BranchCategoryModel.ts";
 
 AdminJS.registerAdapter({
   Resource,
@@ -14,24 +17,117 @@ AdminJS.registerAdapter({
 
 const adminJsOptions = new AdminJS({
   rootPath: "/admin",
+  componentLoader,
+
   resources: [
     {
-      resource: CategoryModel,
-    },
-    {
-      resource: ThemeModel,
+      resource: BranchModel,
+      options: {
+        properties: {
+          _id: {
+            isVisible: {
+              list: false,
+              filter: false,
+              show: false,
+              edit: false,
+              create: false,
+            },
+          },
+
+          primary_image: {
+            isVisible: {
+              list: false,
+              filter: false,
+              show: false,
+              edit: false,
+              create: false,
+            },
+          },
+        },
+      },
+      features: [
+        uploadFeature({
+          componentLoader,
+          provider: { local: { bucket: "public", opts: {} } },
+          properties: {
+            key: "primary_image",
+            file: "image",
+          },
+          validation: { mimeTypes: ["image/png"] },
+        }),
+      ],
     },
 
     {
-      resource: ContentModel,
+      resource: BranchCategoryModel,
+      options: {
+        properties: {
+          _id: {
+            isVisible: {
+              list: false,
+              filter: false,
+              show: false,
+              edit: false,
+              create: false,
+            },
+          },
+        },
+      },
+    },
+
+    {
+      resource: BoxTypesModel,
+      options: {
+        properties: {
+          _id: {
+            isVisible: {
+              list: false,
+              filter: false,
+              show: false,
+              edit: false,
+              create: false,
+            },
+          },
+          primary_image: {
+            isVisible: {
+              list: false,
+              filter: false,
+              show: false,
+              edit: false,
+              create: false,
+            },
+          },
+        },
+      },
+      features: [
+        uploadFeature({
+          componentLoader,
+          provider: { local: { bucket: "public", opts: {} } },
+          properties: {
+            key: "primary_image",
+            file: "image",
+          },
+          validation: { mimeTypes: ["image/png"] },
+        }),
+      ],
     },
     {
-      resource: UserModel,
+      resource: OrderModel,
       options: {
-        id: "Users",
+        properties: {
+          _id: {
+            isVisible: {
+              list: false,
+              filter: false,
+              show: false,
+              edit: false,
+              create: false,
+            },
+          },
+        },
         parent: {
-          name: "Authentication",
-          icon: "User",
+          name: "Purchases",
+          icon: "Users",
         },
         actions: {
           new: {
@@ -44,7 +140,44 @@ const adminJsOptions = new AdminJS({
             isAccessible: false,
           },
           show: {
+            isAccessible: true,
+          },
+          bulkDelete: {
             isAccessible: false,
+          },
+        },
+      },
+    },
+    {
+      resource: CustomerModel,
+      options: {
+        properties: {
+          _id: {
+            isVisible: {
+              list: false,
+              filter: false,
+              show: false,
+              edit: false,
+              create: false,
+            },
+          },
+        },
+        parent: {
+          name: "Purchases",
+          icon: "Users",
+        },
+        actions: {
+          new: {
+            isAccessible: false,
+          },
+          edit: {
+            isAccessible: false,
+          },
+          delete: {
+            isAccessible: false,
+          },
+          show: {
+            isAccessible: true,
           },
           bulkDelete: {
             isAccessible: false,
@@ -54,19 +187,19 @@ const adminJsOptions = new AdminJS({
     },
   ],
 });
-
+adminJsOptions.watch();
 const AdminRouter = AdminJSExpress.buildAuthenticatedRouter(adminJsOptions, {
   authenticate: async (email, password) => {
-    if (
+    /*  if (
       email === process.env.ADMIN_EMAIL &&
       password === process.env.ADMIN_PASSWORD
-    )
-      return {
-        redirectUrl: "/admin",
-        user: { email: process.env.ADMIN_EMAIL },
-      };
+    ) */
+    return {
+      redirectUrl: "/admin",
+      user: { email: process.env.ADMIN_EMAIL },
+    };
 
-    return null;
+    /*   return null; */
   },
   cookiePassword: "session-secret",
 });
