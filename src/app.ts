@@ -21,7 +21,7 @@ const start = async () => {
   await Database();
 
   routes(app);
-  /*   app.use(AdminBroConfig.AdminBroRootPath, AdminBroConfig.AdminRouter); */
+  app.use(AdminBroConfig.AdminBroRootPath, AdminBroConfig.AdminRouter);
   app.use("/public", express.static("public"));
 
   //Server Up
