@@ -190,14 +190,14 @@ const adminJsOptions = new AdminJS({
 adminJsOptions.watch();
 const AdminRouter = AdminJSExpress.buildAuthenticatedRouter(adminJsOptions, {
   authenticate: async (email, password) => {
-    /*  if (
+    if (
       email === process.env.ADMIN_EMAIL &&
       password === process.env.ADMIN_PASSWORD
-    ) */
-    return {
-      redirectUrl: "/admin",
-      user: { email: process.env.ADMIN_EMAIL },
-    };
+    )
+      return {
+        redirectUrl: "/admin",
+        user: { email: process.env.ADMIN_EMAIL },
+      };
 
     /*   return null; */
   },
