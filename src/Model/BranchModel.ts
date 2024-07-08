@@ -9,6 +9,10 @@ const BranchSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  address_google_maps: {
+    type: String,
+    required: false,
+  },
   category: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "BranchCategory",

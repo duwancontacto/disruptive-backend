@@ -34,4 +34,6 @@ routes.post(
   OrderControllers.CreateCustomer
 );
 
+routes.post("/mercadopago_webhook", OrderControllers.MercadoPagoWebhookSuccess);
+
 export default routes;
