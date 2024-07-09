@@ -73,20 +73,16 @@ const CreateOrder = async (req: Request, res: Response) => {
     const payload = {
       name: customer.name,
       email: customer.email,
+      phone: customer.phone,
+      dni: customer.dni,
       price: total_price,
       branch: branchs?.name,
       boxSize: findBox?.name,
+      method:
+        payment_method === "mercadopago" ? "Mercado Pago" : "Transferencia",
+      date: new Date().toLocaleDateString(),
       orderCount: orderCount,
     };
-
-    sendPurchaseMail({
-      email: customer.email,
-      payload,
-    });
-
-    sendAdminMail({
-      payload,
-    });
 
     let preferenceResult: any = {};
     if (payment_method === "mercadopago") {
@@ -118,6 +114,15 @@ const CreateOrder = async (req: Request, res: Response) => {
 
       await OrderModel.findByIdAndUpdate(order._id, {
         payment_id: preferenceResult.id,
+      });
+    } else {
+      await sendPurchaseMail({
+        email: customer.email,
+        payload,
+      });
+
+      await sendAdminMail({
+        payload,
       });
     }
 

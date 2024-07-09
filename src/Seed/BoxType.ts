@@ -13,37 +13,37 @@ const seedDatabaseBoxType = async () => {
     {
       name: "Chica",
       robotic: false,
-      primary_image: "DEFAULT-BOX/DEFAULT-BOX.svg",
+      primary_image: "DEFAULT-BOX/1.png",
     },
     {
       name: "Mediana",
       robotic: false,
-      primary_image: "DEFAULT-BOX/DEFAULT-BOX.svg",
+      primary_image: "DEFAULT-BOX/2.png",
     },
     {
       name: "Grande",
       robotic: false,
-      primary_image: "DEFAULT-BOX/DEFAULT-BOX.svg",
+      primary_image: "DEFAULT-BOX/3.png",
     },
     {
       name: "Chica",
       robotic: true,
-      primary_image: "DEFAULT-BOX/DEFAULT-BOX.svg",
+      primary_image: "DEFAULT-BOX/4.png",
     },
     {
       name: "Mediana",
       robotic: true,
-      primary_image: "DEFAULT-BOX/DEFAULT-BOX.svg",
+      primary_image: "DEFAULT-BOX/5.png",
     },
     {
       name: "Grande",
       robotic: true,
-      primary_image: "DEFAULT-BOX/DEFAULT-BOX.svg",
+      primary_image: "DEFAULT-BOX/6.png",
     },
     {
       name: "Extra Grande",
       robotic: true,
-      primary_image: "DEFAULT-BOX/DEFAULT-BOX.svg",
+      primary_image: "DEFAULT-BOX/7.png",
     },
   ];
 

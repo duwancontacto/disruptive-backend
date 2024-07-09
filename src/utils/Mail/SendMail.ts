@@ -24,7 +24,7 @@ async function sendPurchaseMail({
   payload: any;
 }) {
   const template = fs
-    .readFileSync(path.join(__dirname, "./Templates/purchase.html"))
+    .readFileSync(path.join(__dirname, "./Templates/purchase2.html"))
     .toString();
 
   let html = mustache.render(template, payload);
