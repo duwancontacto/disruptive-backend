@@ -8,6 +8,7 @@ dotenv.config({ path: ".env" });
 const sucursalesInfo = [
   {
     name: "Córdoba",
+    category: "INTERIOR",
     image: "DEFAULT-BRANCH/1.png",
     address_google: "https://goo.gl/maps/x9ERnk1kxyCeH5339",
     address: "Av. Pedro Simón Laplace 5442 | Villa Allende Mall",
@@ -55,6 +56,7 @@ const sucursalesInfo = [
   },
   {
     name: "Pilar",
+    category: "GBA",
     address_google: "https://goo.gl/maps/wUk8Bqh6GCqnBjzm9",
     image: "DEFAULT-BRANCH/2.png",
     address: "Panamericana km 42,5 | Bs. As. | Office Park Quatro | Of. 306",
@@ -102,6 +104,7 @@ const sucursalesInfo = [
   },
   {
     name: "Unicenter",
+    category: "GBA",
     address_google: "https://goo.gl/maps/QQWvfvyo3gErpv9N6",
     image: "DEFAULT-BRANCH/3.png",
     address: "Paraná 3617 | Martínez | PB Local 1009",
@@ -149,6 +152,7 @@ const sucursalesInfo = [
   },
   {
     name: "Parque Leloir",
+    category: "GBA",
     address_google: "https://maps.app.goo.gl/4CTr8LnjYJgDaNBx8",
     image: "DEFAULT-BRANCH/4.png",
     address: "Av. Martín Fierro 3361 | Villa Udaondo",
@@ -189,6 +193,7 @@ const sucursalesInfo = [
   },
   {
     name: "Vicente López",
+    category: "GBA",
     address_google: "https://maps.app.goo.gl/5irRSdQK3H47ceeT7",
     image: "DEFAULT-BRANCH/5.png",
     address: "Av. del Libertador 174 | Vte. López",
@@ -236,6 +241,7 @@ const sucursalesInfo = [
   },
   {
     name: "Alto Palermo",
+    category: "CABA",
     address_google: "https://goo.gl/maps/4o1wcsTTdfjY8Abs6",
     image: "DEFAULT-BRANCH/6.png",
     address: "Av. Santa Fé 3252 | CABA | 1° Subsuelo Calle Berutti",
@@ -282,6 +288,7 @@ const sucursalesInfo = [
   },
   {
     name: "Belgrano",
+    category: "CABA",
     address_google: "https://goo.gl/maps/vocC1yDsnCiptueZ6",
     image: "DEFAULT-BRANCH/7.png",
     address: "Av. Cabildo 1507 | Piso 6 | CABA",
@@ -329,6 +336,7 @@ const sucursalesInfo = [
   },
   {
     name: "Centro",
+    category: "CABA",
     address_google: "https://goo.gl/maps/8ix6ukHbraaWwJ3j8",
     image: "DEFAULT-BRANCH/8.png",
     address: "Paraguay 635 | PB | CABA",
@@ -376,6 +384,7 @@ const sucursalesInfo = [
   },
   {
     name: "Recoleta",
+    category: "CABA",
     address_google: "https://maps.app.goo.gl/V3ws3PyYc237V1P89",
     image: "DEFAULT-BRANCH/9.png",
     address: "Av. Callao 1059 | 1° Subsuelo | CABA",
@@ -431,9 +440,13 @@ const seedDatabaseBranch = async () => {
   const categories = await BranchCategoryModel.find({});
   const boxTypes = await BoxTypeModel.find({});
 
-  for (let i = 0; i < 9; i++) {
-    const category = categories[Math.floor(Math.random() * categories.length)];
+  const selectCategories: any = {
+    CABA: categories[0],
+    GBA: categories[1],
+    INTERIOR: categories[2],
+  };
 
+  for (let i = 0; i < 9; i++) {
     const boxes = boxTypes
       .filter((boxType) => sucursalesInfo[i]?.robotic === boxType.robotic)
       .map((boxType) => ({
@@ -452,7 +465,7 @@ const seedDatabaseBranch = async () => {
     await BranchModel.create({
       name: sucursalesInfo[i].name,
       address: sucursalesInfo[i].address,
-      category: category._id,
+      category: selectCategories[sucursalesInfo[i].category],
       details: sucursalesInfo[i].details,
       robotic: sucursalesInfo[i].robotic,
       primary_image: sucursalesInfo[i].image,

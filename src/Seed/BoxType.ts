@@ -12,37 +12,37 @@ const seedDatabaseBoxType = async () => {
   const boxTypes = [
     {
       name: "Chica",
-      robotic: false,
+      robotic: true,
       primary_image: "DEFAULT-BOX/1.png",
     },
     {
       name: "Mediana",
-      robotic: false,
+      robotic: true,
       primary_image: "DEFAULT-BOX/2.png",
     },
     {
       name: "Grande",
-      robotic: false,
+      robotic: true,
       primary_image: "DEFAULT-BOX/3.png",
     },
     {
       name: "Chica",
-      robotic: true,
+      robotic: false,
       primary_image: "DEFAULT-BOX/4.png",
     },
     {
       name: "Mediana",
-      robotic: true,
+      robotic: false,
       primary_image: "DEFAULT-BOX/5.png",
     },
     {
       name: "Grande",
-      robotic: true,
+      robotic: false,
       primary_image: "DEFAULT-BOX/6.png",
     },
     {
       name: "Extra Grande",
-      robotic: true,
+      robotic: false,
       primary_image: "DEFAULT-BOX/7.png",
     },
   ];
