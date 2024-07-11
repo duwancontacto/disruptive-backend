@@ -57,7 +57,7 @@ async function sendAdminMail({ payload }: { payload: any }) {
 async function sendMail({ email, subject, html, title }: Props) {
   try {
     const transporter = await nodemailer.createTransport({
-      service: "office365",
+      service: "gmail",
       /*  host: "smtp.gmail.com",
       port: 465,
       secure: true,   */
