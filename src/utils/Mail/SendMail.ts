@@ -57,16 +57,30 @@ async function sendAdminMail({ payload }: { payload: any }) {
 async function sendMail({ email, subject, html, title }: Props) {
   try {
     const transporter = await nodemailer.createTransport({
-      service: "gmail",
-      /* host: "smtp.gmail.com",
+      service: "office365",
+      /*  host: "smtp.gmail.com",
       port: 465,
-      secure: true, */
+      secure: true,   */
       auth: {
         user: process.env.NODEMAILER_USER,
         pass: process.env.NODEMAILER_PASS,
       },
     });
 
+    /*    const transporter = await nodemailer.createTransport({
+      service: "office365",
+      host: "smtp.office365.com",
+      port: 587,
+      secure: false,
+      auth: {
+        user: process.env.NODEMAILER_USER,
+        pass: process.env.NODEMAILER_PASS,
+      },
+      tls: {
+        ciphers: "SSLv3",
+      },
+    });
+ */
     await transporter
       .verify()
       .then((result: any) => {
