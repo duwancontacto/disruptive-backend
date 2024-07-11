@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import OrderModel from "../Model/OrderModel.ts";
 import CustomerModel from "../Model/CustomerModel.ts";
 import BranchModel from "../Model/BranchModel.ts";
-import { MercadoPagoConfig, Preference } from "mercadopago";
+import { MercadoPagoConfig, Preference, Payment } from "mercadopago";
 import { sendAdminMail, sendPurchaseMail } from "../utils/Mail/SendMail.ts";
 import BoxTypesModel from "../Model/BoxTypesModel.ts";
 
@@ -166,9 +166,69 @@ const CreateCustomer = async (req: Request, res: Response) => {
 
 const MercadoPagoWebhookSuccess = async (req: Request, res: Response) => {
   try {
-    console.log("Mercadopago payment webhook", req.body);
+    const { action, data } = req.body;
 
-    res.status(200).json({ message: "Webhook received" });
+    if (action === "payment.created") {
+      const paymentId = data.id;
+
+      try {
+        const payment = new Payment(client);
+        const paymentData = await payment.get({ id: paymentId });
+
+        const order = await OrderModel.findById(paymentData.external_reference);
+
+        if (!order) {
+          return res.status(400).send("Order not found");
+        }
+
+        await OrderModel.findByIdAndUpdate(order._id, {
+          status: "completed",
+        });
+
+        const orderCount = await OrderModel.countDocuments({});
+
+        const customer = await CustomerModel.findById(order.customer_id);
+
+        if (!customer) {
+          return res.status(400).send("Customer not found");
+        }
+
+        const findBox = await BoxTypesModel.findById(order.box_type_id);
+        const branchs = await BranchModel.findById(order.branch_id);
+
+        const payload = {
+          name: customer.name,
+          email: customer.email,
+          phone: customer.phone,
+          dni: customer.dni,
+          price: order.total_price,
+          branch: branchs?.name,
+          boxSize: findBox?.name,
+          method:
+            order.payment_method === "mercadopago"
+              ? "Mercado Pago"
+              : "Transferencia",
+          date: new Date().toLocaleDateString(),
+          orderCount: orderCount,
+        };
+
+        await sendPurchaseMail({
+          email: customer.email,
+          payload,
+        });
+
+        await sendAdminMail({
+          payload,
+        });
+
+        res.status(200).send("Payment processed successfully");
+      } catch (error) {
+        console.error("Error processing payment:", error);
+        res.status(500).send("Internal Server Error");
+      }
+    } else {
+      res.status(400).send("Event not handled");
+    }
   } catch (error) {
     console.log("Error creating customer", error);
     res.status(500).json({ message: "Error creating customer" });
